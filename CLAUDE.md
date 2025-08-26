@@ -81,16 +81,61 @@ neuro-scientific-writer/
 - Automated quality reports
 - Template customization
 
+## Pattern Detection: Current Limitations and Improvements
+
+### **Current Pattern Detection Reality:**
+The existing pattern detection system is **terminology-focused and naive**, with significant limitations:
+
+- **Terminology-Heavy Approach**: ~70% of pattern detection relies on neuroscience term density rather than sophisticated structural analysis
+- **Basic Sentence Classification**: Uses simple regex patterns that miss nuanced argumentation structures
+- **Shallow Structural Analysis**: "Funnel structure" detection only looks for keyword patterns, not actual conceptual flow
+- **No Empirical Basis**: Current patterns are rule-based assumptions, not derived from analysis of actual published papers
+
+### **Critical Gap Identified:**
+The system fails to detect sophisticated writing patterns that distinguish high-quality introductions:
+- **Conceptual Flow Progression**: How ideas develop from broad to specific across paragraphs
+- **Argumentation Sophistication**: Complex reasoning structures and evidence integration
+- **Transition Strategy Analysis**: How paragraphs connect conceptually and logically
+- **Information Density Patterns**: Pacing and distribution of concepts throughout introductions
+
+### **Planned Enhancements (Empirical Data Required):**
+
+#### **Phase 1: Enhanced Universal Pattern Detection**
+- **True Structural Analysis**: Detect conceptual breadth progression and logical flow patterns
+- **Argumentation Mapping**: Identify problem→gap→solution vs. hypothesis→test→implications structures  
+- **Transition Sophistication**: Analyze how paragraphs connect (causal, comparative, progressive)
+- **Information Architecture**: Track paragraph function, length distribution, and concept density
+
+#### **Phase 2: Empirical Pattern Learning**
+- **Data Collection Framework**: Systematic analysis of 100+ successful introductions per research domain
+- **Quantitative Structure Analysis**: Statistical measurement of paragraph counts, sentence complexity, argument flow
+- **Success Pattern Identification**: Machine learning from published papers to identify effective structures
+- **Validation Pipeline**: Cross-reference patterns against publication success metrics
+
+#### **Future Journal-Specific Features (DATA-DEPENDENT)**
+⚠️ **CRITICAL REQUIREMENT**: Any journal-specific patterns MUST be derived from empirical analysis of actual published papers
+- **No Assumptions**: We make NO claims about journal preferences without statistical evidence
+- **Empirical Validation Required**: 50+ paper analysis per journal before claiming structural differences  
+- **Evidence-Based Only**: All recommendations must be backed by quantitative analysis of successful publications
+
+### **Scientific Rigor Standards:**
+- **Zero Unfounded Claims**: No assumptions about journal preferences or structural requirements
+- **Empirical Evidence Requirement**: All patterns must be derived from actual paper analysis
+- **Statistical Validation**: Quantitative proof required for any claimed structural differences
+- **Honest Limitation Disclosure**: Clear communication about current system capabilities
+
 ## Development Notes
-- Focus on neuroscience-specific terminology and writing patterns
+- **Pattern Detection Priority**: Focus on universal structural sophistication before any journal-specific features
 - Implement robust error handling for PDF processing
 - Maintain high accuracy standards for medical/scientific content
 - Ensure proper citation attribution and context
 - Build modular components for easy extension to other fields
+- **Empirical Data Foundation**: All enhancements must be based on analysis of actual published papers
 
 ## Future Enhancements
+- **Enhanced Pattern Detection**: Sophisticated structural analysis based on empirical paper analysis
 - Multi-language support
 - Additional citation styles
 - Collaborative editing features
 - Integration with manuscript preparation tools
-- Advanced statistical analysis of writing patterns
+- **Journal-Specific Features**: Only if supported by statistical analysis of published papers

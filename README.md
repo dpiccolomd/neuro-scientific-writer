@@ -176,16 +176,29 @@ if quality_report.errors:
 - 📊 **Statistical inconsistencies** in numerical reporting
 - 🔗 **Citation context mismatches** 
 
-## 📋 Core Features
+## 📋 Core Features & Current Status
 
+### **Implemented Features:**
 - ✅ **PDF Processing**: Multi-engine extraction with 99.9% reliability
-- ✅ **Pattern Analysis**: 70+ neuroscience terminology categories  
-- ✅ **Template Generation**: Structured frameworks based on high-impact papers
+- ✅ **Terminology Analysis**: 70+ neuroscience terminology categories  
+- ✅ **Template Generation**: Basic structural frameworks with guided variables
 - ✅ **Rigorous QC**: Multi-layer validation with error detection
 - ✅ **Citation Verification**: Cross-reference against original sources
 - ✅ **Statistical Validation**: Numerical accuracy checking
-- ✅ **Zotero Integration**: Compatible with reference managers
+- ✅ **Research Specification**: Comprehensive study parameter modeling
 - ✅ **Academic Standards**: Designed for peer-review quality
+
+### **Pattern Detection Reality Check:**
+- ⚠️ **Current Approach**: Terminology-focused and rule-based (NOT empirically derived)
+- ⚠️ **Structural Analysis**: Basic keyword patterns only, lacks conceptual flow detection
+- ⚠️ **Journal Assumptions**: NO journal-specific features implemented (would require 50+ paper analysis per journal)
+- 🚧 **Future Enhancement**: Sophisticated pattern detection requires empirical data collection
+
+### **Planned Enhancements (DATA-DEPENDENT):**
+- 🔬 **Empirical Pattern Learning**: Statistical analysis of 100+ successful introductions per domain
+- 🔬 **True Structural Analysis**: Conceptual breadth progression and logical flow patterns
+- 🔬 **Argumentation Mapping**: Problem→gap→solution vs. hypothesis→test→implications structures
+- 🔬 **Journal-Specific Features**: ONLY if supported by statistical analysis of published papers
 
 ## 🏗️ System Architecture
 
@@ -245,8 +258,30 @@ Every generated content includes:
 - Quality validation reports for transparency
 - Error logging and debugging guides
 
-## ⚠️ Important Limitations
+## ⚠️ Important Limitations & Current System Reality
 
+### **Current Pattern Detection Limitations:**
+The existing pattern detection system has **significant limitations** that users must understand:
+
+- **Terminology-Focused Approach**: ~70% of pattern detection relies on neuroscience term density rather than sophisticated structural analysis
+- **Basic Sentence Classification**: Uses simple regex patterns that miss nuanced argumentation structures  
+- **Shallow Structural Analysis**: "Funnel structure" detection only looks for keyword patterns, not actual conceptual flow
+- **No Empirical Foundation**: Current patterns are rule-based assumptions, NOT derived from analysis of actual published papers
+
+### **Critical Gap Identified:**
+The system currently fails to detect sophisticated writing patterns that distinguish high-quality introductions:
+- **Conceptual Flow Progression**: How ideas develop from broad to specific across paragraphs
+- **Argumentation Sophistication**: Complex reasoning structures and evidence integration
+- **Transition Strategy Analysis**: How paragraphs connect conceptually and logically
+- **Information Density Patterns**: Pacing and distribution of concepts throughout introductions
+
+### **Scientific Rigor Standards:**
+- **Zero Unfounded Claims**: No assumptions about journal preferences or structural requirements without statistical evidence
+- **Empirical Evidence Requirement**: All patterns must be derived from actual paper analysis (50+ papers minimum)
+- **Statistical Validation**: Quantitative proof required for any claimed structural differences
+- **Honest Limitation Disclosure**: Clear communication about current system capabilities
+
+### **Other System Limitations:**
 1. **Human Oversight Required**: All output requires expert review
 2. **Source Quality Dependent**: Only as good as input literature
 3. **Context Sensitivity**: May miss nuanced domain-specific requirements
