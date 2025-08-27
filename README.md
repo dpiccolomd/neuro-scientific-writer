@@ -36,25 +36,40 @@ python examples/empirical_pattern_demo.py
 
 **✅ That's it! The tool is ready to use.**
 
-### 2. **Build Scientific Pattern Database (REQUIRED FOR ACCURACY)**
+### 2A. **🆕 ZOTERO INTEGRATION: One-Command Training (RECOMMENDED)**
 
-**⚠️ CRITICAL: The tool needs real research papers to learn accurate patterns**
+**⚡ NEW: Train directly from your Zotero library!**
 
 ```bash
-# Step 1: Gather research papers
+# Step 1: Get Zotero API credentials (one-time setup)
+python scripts/train_from_zotero.py --setup_help
+
+# Step 2: Set your credentials
+export ZOTERO_API_KEY="your_api_key_here"
+export ZOTERO_USER_ID="your_user_id_here"
+
+# Step 3: Train from Zotero collection (one command!)
+python scripts/train_from_zotero.py --collection "Neuroscience Papers"
+
+# This automatically:
+# ✓ Downloads 50+ PDFs from your Zotero library
+# ✓ Filters for neuroscience papers with citations
+# ✓ Extracts introductions and analyzes structures
+# ✓ Creates statistical patterns with confidence intervals
+# ✓ Preserves metadata and DOIs for verification
+```
+
+### 2B. **Manual Training (Alternative Method)**
+
+**If you prefer manual PDF collection:**
+
+```bash
+# Step 1: Gather research papers manually
 mkdir -p data/training_papers
 # Put 50+ neuroscience PDF papers in this folder
-# Get them from: PubMed, Nature Neuroscience, Neuron, Journal of Neuroscience
 
 # Step 2: Build empirical pattern database
 python scripts/collect_empirical_data.py --input data/training_papers/
-
-# This will:
-# ✓ Extract text from all PDFs
-# ✓ Analyze 50+ introduction structures  
-# ✓ Create statistical patterns (NOT assumptions!)
-# ✓ Generate confidence intervals
-# ✓ Save empirical database
 ```
 
 **🔬 What this does:**
@@ -63,103 +78,71 @@ python scripts/collect_empirical_data.py --input data/training_papers/
 - Learns what actually works in successful publications
 - Provides scientific rigor for medical/academic use
 
-### 3. **Generate Your Introduction (Simple Process)**
+### 3. **🔬 Analyze Your Writing with Empirical Patterns**
 
 ```bash
-# Method 1: Use the demo to see how it works
-python examples/empirical_pattern_demo.py
+# Analyze your introduction using trained patterns
+python scripts/analyze_introduction.py --text your_intro.txt --patterns data/empirical_patterns/
 
-# Method 2: Process your specific research project  
-python -c "
-# Import the tools
-from src.pdf_processor import PDFExtractor
-from src.analysis import EmpiricalPatternDetector
-from src.template_engine import TargetedTemplateGenerator
-from src.citation_manager import APAFormatter
-
-# Define your research (fill in your details)
-project_details = {
-    'title': 'Your Study Title Here',
-    'research_type': 'clinical_trial',  # or observational_study, etc.
-    'main_objective': 'What you want to investigate',
-    'hypothesis': 'What you expect to find',
-    'methods': ['fMRI', 'behavioral_testing'],  # your methods
-    'population': 'Who you are studying'
-}
-
-# Generate template based on empirical patterns + your research
-template_generator = TargetedTemplateGenerator()
-template = template_generator.generate_for_project(project_details)
-
-print('Generated introduction template:')
-print(template.formatted_introduction)
-"
-"
+# Output example:
+# ✅ Based on analysis of 67 papers from your Zotero library:
+#   • Optimal paragraph count: 4.3±0.7 (current: 3, recommend: adjust)
+#   • Problem-gap-solution structure: Used in 71% of successful papers
+#   • Overall quality score: 0.847 (ready for submission: Yes)
 ```
 
-### 4. **Generate Introduction Draft**
+### 4. **📝 Generate Evidence-Based Templates**
 
 ```bash
-# For your specific research project
-python -c "
-# Define your research project
-project_info = {
-    'research_field': 'cognitive neuroscience',
-    'target_phenomenon': 'working memory consolidation', 
-    'primary_method': 'functional MRI',
-    'key_brain_region': 'prefrontal cortex',
-    'broad_field_statement': 'Working memory represents a fundamental cognitive process',
-    'hypothesis': 'We hypothesize that PFC-hippocampal interactions facilitate consolidation'
-}
+# Generate template for your specific research
+python scripts/generate_template.py --research_type clinical_trial --domain neurosurgery --patterns data/empirical_patterns/
 
-# Fill template variables (simplified example)
-filled_template = template.sections[0].content_template
-for var_name, value in project_info.items():
-    filled_template = filled_template.replace(f'{{{var_name}}}', value)
-
-print('Generated introduction draft:')
-print(filled_template)
-print('\\n⚠️  IMPORTANT: This draft requires manual review and validation!')
-"
+# Creates template with:
+# • Structure based on YOUR paper collection
+# • Statistical evidence (not assumptions)  
+# • Guided variables with examples
+# • Journal-specific patterns (if 50+ papers available)
 ```
 
-### 5. **Validate Everything (Medical-Grade Quality)**
+### 5. **📋 Quick Reference**
 
 ```bash
-# The tool automatically checks:
-# ✓ Citation accuracy against source papers
-# ✓ Statistical claims validation  
-# ✓ Terminology appropriateness
-# ✓ Factual consistency
-# ✓ Pattern confidence scores
+# 🆕 ZOTERO TRAINING (One command)
+python scripts/train_from_zotero.py --collection "Neuroscience Papers"
 
-# Run quality validation:
-python -c "
-from src.quality_control import QualityValidator
+# 🔬 ANALYZE INTRODUCTION (With your empirical patterns)  
+python scripts/analyze_introduction.py --text intro.txt --patterns data/empirical_patterns/
 
-validator = QualityValidator()
-report = validator.validate_draft(your_text, source_papers)
+# 📝 GENERATE TEMPLATE (Evidence-based)
+python scripts/generate_template.py --research_type clinical_trial --domain neurosurgery
 
-print(f'Overall Quality: {report.overall_score:.3f}')
-print(f'Citation Accuracy: {report.citation_accuracy:.3f}')
-print(f'Ready for Submission: {report.overall_score > 0.85}')
-"
+# 🎓 LEARN THE CONCEPTS (Educational tutorial)
+python examples/pattern_comparison_tutorial.py
+
+# 📚 MANUAL TRAINING (Alternative to Zotero)
+python scripts/collect_empirical_data.py --input data/training_papers/
 ```
 
 ## 🎯 **For Non-Technical Users**
 
-**What you need to do:**
+**🆕 EASIER WITH ZOTERO** (Recommended):
+1. **Set up Zotero API** (one-time, 5 minutes) - see `ZOTERO_INTEGRATION_GUIDE.md`
+2. **Run one command**: `python scripts/train_from_zotero.py --collection "Neuroscience Papers"`
+3. **Use the tool** with patterns trained from YOUR library
+
+**Manual Alternative:**
 1. **Get PDF papers** (50+ from PubMed, your university library)
 2. **Put them in a folder** called `data/training_papers/`
-3. **Run one command**: `python scripts/collect_empirical_data.py --input data/training_papers/`
-4. **Use the tool** with scientifically validated patterns
+3. **Run training**: `python scripts/collect_empirical_data.py --input data/training_papers/`
 
 **What the tool does for you:**
-- Reads all your papers automatically
-- Learns what makes good introductions
+- Downloads papers automatically from Zotero (or reads manual PDFs)
+- Learns what makes good introductions from YOUR collection
 - Creates templates based on real successful papers
 - Validates your writing against medical standards
-- Gives you confidence scores for everything
+- Gives you confidence scores with statistical evidence
+
+**📚 Complete Guide**: See `ZOTERO_INTEGRATION_GUIDE.md` for detailed instructions
 
 ## 🛡️ Rigorous Quality Control Features
 
