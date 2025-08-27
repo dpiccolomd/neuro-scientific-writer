@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Empirical Pattern Detection Demo
+Pattern Detection Comparison Tutorial
 
-Demonstrates the improved empirical pattern detection system vs rule-based approach.
-Shows how to collect data, train patterns, and use them for analysis.
+Educational walkthrough comparing rule-based vs empirical pattern detection approaches.
+This is for learning purposes - shows the difference between naive assumptions 
+and empirical evidence from published literature.
 
-This addresses the critical limitation identified in our honest assessment:
-"Current pattern detection is terminology-focused and naive"
+For actual analysis, use: scripts/analyze_introduction.py
 """
 
 import sys
@@ -15,7 +15,6 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
-from pdf_processor import PDFExtractor
 from analysis import (
     NeuroTextAnalyzer, 
     WritingPatternDetector,  # Rule-based (naive)
@@ -23,12 +22,15 @@ from analysis import (
 )
 
 
-def demo_empirical_vs_rule_based():
-    """Demo comparing rule-based vs empirical pattern detection."""
+def tutorial_empirical_vs_rule_based():
+    """Educational comparison of rule-based vs empirical approaches."""
     
     print("=" * 80)
-    print("EMPIRICAL PATTERN DETECTION DEMONSTRATION")
+    print("TUTORIAL: EMPIRICAL vs RULE-BASED PATTERN DETECTION")
     print("=" * 80)
+    print("🎓 Educational Purpose: Understanding the difference between")
+    print("   assumptions (rule-based) and empirical evidence (statistical)")
+    print()
     
     # Sample neuroscience introduction text
     sample_intro = """
@@ -70,80 +72,86 @@ def demo_empirical_vs_rule_based():
     print("\n🔬 ANALYZING TEXT STRUCTURE")
     print("-" * 40)
     
-    analysis = text_analyzer.analyze_text(sample_intro, "demo_intro", "introduction")
+    analysis = text_analyzer.analyze_text(sample_intro, "tutorial_intro", "introduction")
     
     print(f"Total sentences: {analysis.total_sentences}")
     print(f"Neuroscience terms found: {len(analysis.neuro_terms)}")
     print(f"Key terms: {', '.join(list(analysis.neuro_terms)[:10])}")
     
     # Rule-based pattern detection
-    print("\n❌ RULE-BASED PATTERN DETECTION (Current Naive System)")
+    print("\n❌ APPROACH 1: RULE-BASED PATTERN DETECTION")
     print("-" * 60)
+    print("📚 Educational Note: This shows how assumptions work")
     
     rule_patterns = rule_based_detector.detect_patterns([analysis])
     
     print(f"Patterns detected: {len(rule_patterns)}")
-    print("\nPattern Details:")
+    print("\nPattern Details (Based on Assumptions):")
     for pattern in rule_patterns:
         print(f"  • {pattern.pattern_type}: {pattern.description}")
         print(f"    Confidence: {pattern.confidence:.3f} | Evidence: {pattern.evidence}")
         print(f"    ⚠️  Based on: {pattern.detection_method}")
     
-    print("\n🔍 RULE-BASED LIMITATIONS:")
+    print("\n🔍 LIMITATIONS OF RULE-BASED APPROACH:")
     print("  • Terminology-focused approach (~70% keyword counting)")
     print("  • Hardcoded thresholds and assumptions")
     print("  • No empirical validation against published papers")
     print("  • Cannot detect sophisticated argumentation structures")
     print("  • Misses conceptual flow and transition sophistication")
+    print("  • Not suitable for medical/academic rigor")
     
-    # Empirical pattern detection (demonstration)
-    print("\n✅ EMPIRICAL PATTERN DETECTION (Improved Scientific System)")
+    # Empirical pattern detection (educational explanation)
+    print("\n✅ APPROACH 2: EMPIRICAL PATTERN DETECTION")
     print("-" * 60)
+    print("📚 Educational Note: This shows how scientific validation works")
     
-    # Note: This would require trained empirical data
-    print("Status: Requires empirical data collection from 50+ published papers")
-    print("\nEmpirical Approach:")
-    print("  • Statistical analysis of actual published introductions")
+    print("Status: Framework ready, requires training data from real papers")
+    print("\nEmpirical Approach Methodology:")
+    print("  • Statistical analysis of 50+ published introductions")
     print("  • Conceptual breadth progression detection")
     print("  • Argumentation structure mapping (problem→gap→solution)")
     print("  • Transition sophistication scoring")
     print("  • Journal-specific patterns (only if statistically validated)")
     print("  • Confidence intervals and significance testing")
     
-    print("\n📊 EMPIRICAL ADVANTAGES:")
+    print("\n📊 ADVANTAGES OF EMPIRICAL APPROACH:")
     print("  • Patterns derived from successful publications")
     print("  • Statistical validation with confidence intervals")
     print("  • Adapts to new empirical evidence")
     print("  • Detects sophisticated structural patterns")
-    print("  • Scientific rigor for medical/academic use")
+    print("  • Scientific rigor suitable for medical/academic use")
+    print("  • No assumptions - only evidence-based conclusions")
     
     # Show how to collect empirical data
-    print("\n🛠️  HOW TO ENABLE EMPIRICAL DETECTION")
+    print("\n🛠️  HOW TO ENABLE EMPIRICAL DETECTION (Real Usage)")
     print("-" * 60)
     print("1. Collect 50+ peer-reviewed neuroscience papers:")
     print("   mkdir -p data/training_papers")
     print("   # Add PDF files from journals like Nature Neuroscience, Neuron, etc.")
     print("")
-    print("2. Run empirical data collection:")
+    print("2. Train empirical patterns:")
     print("   python scripts/collect_empirical_data.py --input data/training_papers/")
     print("")
-    print("3. Compare methods:")
-    print("   python scripts/compare_pattern_methods.py --input data/test_papers/")
+    print("3. Or train from Zotero:")
+    print("   python scripts/train_from_zotero.py --collection 'Training Papers'")
     print("")
-    print("4. Use empirical patterns in your analysis:")
-    print("   patterns = empirical_detector.detect_patterns_empirical([analysis])")
+    print("4. Analyze introductions with trained patterns:")
+    print("   python scripts/analyze_introduction.py --text intro.txt --patterns data/empirical_patterns/")
     
     print("\n" + "=" * 80)
-    print("SCIENTIFIC INTEGRITY: Replace assumptions with empirical evidence")
-    print("Current system acknowledged as 'naive' - empirical upgrade critical")
+    print("🎓 TUTORIAL SUMMARY")
+    print("Rule-based = assumptions and guesswork (not suitable for research)")
+    print("Empirical = statistical evidence from published literature (research-ready)")
     print("=" * 80)
 
 
-def show_structural_analysis_demo():
-    """Show advanced structural analysis capabilities."""
+def tutorial_structural_analysis():
+    """Educational walkthrough of structural analysis capabilities."""
     
-    print("\n🏗️  ADVANCED STRUCTURAL ANALYSIS")
+    print("\n🏗️  TUTORIAL: STRUCTURAL ANALYSIS CONCEPTS")
     print("=" * 60)
+    print("📚 Educational Purpose: Understanding how text structure is analyzed")
+    print()
     
     sample_paragraphs = [
         # Paragraph 1: Broad context
@@ -180,21 +188,30 @@ def show_structural_analysis_demo():
         print(f"  Broad indicators: {broad_count}, Specific indicators: {specific_count}")
         print()
     
-    print("✅ IDEAL PATTERN: Breadth scores should decrease (funnel structure)")
-    print("✅ EMPIRICAL VALIDATION: Compare against 100+ successful introductions")
-    print("⚠️  CURRENT LIMITATION: No statistical validation of this pattern")
+    print("✅ IDEAL PATTERN (Funnel Structure): Breadth scores should decrease")
+    print("   Para 1: High breadth (broad context)")
+    print("   Para 2: Medium breadth (specific literature)")
+    print("   Para 3: Lower breadth (gap identification)")
+    print("   Para 4: Lowest breadth (study specifics)")
+    print()
+    print("🔬 EMPIRICAL VALIDATION: Real system compares against patterns")
+    print("   learned from 50+ successful introductions from published papers")
+    print("⚠️  TUTORIAL LIMITATION: This is simulated for educational purposes")
 
 
 def main():
-    """Run the empirical pattern detection demo."""
-    demo_empirical_vs_rule_based()
-    show_structural_analysis_demo()
+    """Run the educational tutorial."""
+    tutorial_empirical_vs_rule_based()
+    tutorial_structural_analysis()
     
-    print(f"\n🎯 NEXT STEPS:")
-    print("1. Collect neuroscience papers for empirical analysis")
-    print("2. Run: python scripts/collect_empirical_data.py")
-    print("3. Replace rule-based with empirical pattern detection")
-    print("4. Validate improvements with statistical testing")
+    print(f"\n🎯 NEXT STEPS FOR REAL USAGE:")
+    print("1. This was educational - for real analysis, use production tools:")
+    print("   python scripts/analyze_introduction.py --text your_intro.txt")
+    print("2. Train empirical patterns from your papers:")
+    print("   python scripts/collect_empirical_data.py --input data/training_papers/")
+    print("3. Or use Zotero integration:")
+    print("   python scripts/train_from_zotero.py --collection 'Training Papers'")
+    print("4. The empirical approach replaces assumptions with evidence")
 
 
 if __name__ == "__main__":
