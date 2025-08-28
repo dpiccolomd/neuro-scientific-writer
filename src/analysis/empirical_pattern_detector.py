@@ -671,13 +671,245 @@ class EmpiricalPatternDetector:
     
     def _detect_empirical_structural_patterns(self, results: List[AnalysisResult]) -> List[EmpiricalPattern]:
         """Detect structural patterns using empirical methods."""
-        # This would use the loaded empirical patterns to evaluate new content
-        return []
+        if len(results) < 10:
+            logger.warning(f"Insufficient data for structural pattern detection: {len(results)} papers")
+            return []
+        
+        patterns = []
+        
+        # Calculate paragraph count statistics
+        paragraph_counts = [len(result.extracted_sections.get('introduction', '').split('\n\n')) 
+                          for result in results if result.extracted_sections.get('introduction')]
+        
+        if paragraph_counts:
+            mean_paragraphs = np.mean(paragraph_counts)
+            std_paragraphs = np.std(paragraph_counts)
+            
+            # Create empirical pattern for paragraph count
+            pattern = EmpiricalPattern(
+                pattern_id=f"structural_paragraphs_{datetime.now().strftime('%Y%m%d')}",
+                pattern_type="paragraph_count",
+                description=f"Optimal paragraph count based on {len(paragraph_counts)} analyzed papers",
+                statistical_evidence={
+                    "mean": float(mean_paragraphs),
+                    "std": float(std_paragraphs),
+                    "min": float(np.min(paragraph_counts)),
+                    "max": float(np.max(paragraph_counts)),
+                    "median": float(np.median(paragraph_counts))
+                },
+                sample_size=len(paragraph_counts),
+                confidence_interval=self._calculate_confidence_interval(paragraph_counts),
+                journals_analyzed=list(set(r.journal for r in results if r.journal)),
+                domains_analyzed=list(set(r.domain for r in results if r.domain)),
+                validation_score=self._calculate_validation_score(paragraph_counts)
+            )
+            patterns.append(pattern)
+        
+        # Calculate sentence length patterns
+        sentence_lengths = []
+        for result in results:
+            intro_text = result.extracted_sections.get('introduction', '')
+            if intro_text:
+                sentences = [s.strip() for s in intro_text.split('.') if s.strip()]
+                sentence_lengths.extend([len(s.split()) for s in sentences])
+        
+        if sentence_lengths:
+            mean_length = np.mean(sentence_lengths)
+            std_length = np.std(sentence_lengths)
+            
+            pattern = EmpiricalPattern(
+                pattern_id=f"structural_sentences_{datetime.now().strftime('%Y%m%d')}",
+                pattern_type="sentence_length",
+                description=f"Optimal sentence length based on {len(sentence_lengths)} analyzed sentences",
+                statistical_evidence={
+                    "mean": float(mean_length),
+                    "std": float(std_length),
+                    "recommended_range": [float(mean_length - std_length), float(mean_length + std_length)]
+                },
+                sample_size=len(sentence_lengths),
+                confidence_interval=self._calculate_confidence_interval(sentence_lengths),
+                journals_analyzed=list(set(r.journal for r in results if r.journal)),
+                domains_analyzed=list(set(r.domain for r in results if r.domain)),
+                validation_score=self._calculate_validation_score(sentence_lengths)
+            )
+            patterns.append(pattern)
+        
+        logger.info(f"Detected {len(patterns)} structural patterns from {len(results)} papers")
+        return patterns
     
     def _detect_empirical_argumentative_patterns(self, results: List[AnalysisResult]) -> List[EmpiricalPattern]:
         """Detect argumentative patterns using empirical methods."""
-        return []
+        if len(results) < 10:
+            return []
+        
+        patterns = []
+        
+        # Analyze problem-gap-solution structure frequency
+        problem_gap_solution_count = 0
+        hypothesis_driven_count = 0
+        
+        # Keywords for different argumentation patterns
+        problem_keywords = ['problem', 'challenge', 'difficulty', 'issue']
+        gap_keywords = ['gap', 'unknown', 'unclear', 'limited', 'lacking']
+        solution_keywords = ['propose', 'investigate', 'examine', 'study']
+        hypothesis_keywords = ['hypothesize', 'predict', 'expect', 'propose that']
+        
+        for result in results:
+            intro_text = result.extracted_sections.get('introduction', '').lower()
+            if not intro_text:
+                continue
+            
+            # Check for problem-gap-solution pattern
+            has_problem = any(keyword in intro_text for keyword in problem_keywords)
+            has_gap = any(keyword in intro_text for keyword in gap_keywords)
+            has_solution = any(keyword in intro_text for keyword in solution_keywords)
+            
+            if has_problem and has_gap and has_solution:
+                problem_gap_solution_count += 1
+            
+            # Check for hypothesis-driven pattern
+            has_hypothesis = any(keyword in intro_text for keyword in hypothesis_keywords)
+            if has_hypothesis:
+                hypothesis_driven_count += 1
+        
+        # Create pattern for argumentation structure frequency
+        total_analyzed = len([r for r in results if r.extracted_sections.get('introduction')])
+        if total_analyzed > 0:
+            pgs_frequency = problem_gap_solution_count / total_analyzed
+            hypothesis_frequency = hypothesis_driven_count / total_analyzed
+            
+            pattern = EmpiricalPattern(
+                pattern_id=f"argumentative_structure_{datetime.now().strftime('%Y%m%d')}",
+                pattern_type="argumentation_structure",
+                description=f"Argumentation structure frequencies based on {total_analyzed} analyzed papers",
+                statistical_evidence={
+                    "problem_gap_solution_frequency": float(pgs_frequency),
+                    "hypothesis_driven_frequency": float(hypothesis_frequency),
+                    "problem_gap_solution_count": problem_gap_solution_count,
+                    "hypothesis_driven_count": hypothesis_driven_count,
+                    "total_analyzed": total_analyzed
+                },
+                sample_size=total_analyzed,
+                confidence_interval=self._calculate_proportion_confidence_interval(pgs_frequency, total_analyzed),
+                journals_analyzed=list(set(r.journal for r in results if r.journal)),
+                domains_analyzed=list(set(r.domain for r in results if r.domain)),
+                validation_score=0.8 if total_analyzed >= 50 else 0.6
+            )
+            patterns.append(pattern)
+        
+        logger.info(f"Detected {len(patterns)} argumentative patterns from {len(results)} papers")
+        return patterns
     
     def _detect_empirical_transitional_patterns(self, results: List[AnalysisResult]) -> List[EmpiricalPattern]:
         """Detect transitional patterns using empirical methods."""
-        return []
+        if len(results) < 10:
+            return []
+        
+        patterns = []
+        
+        # Common transition phrases
+        transitions = {
+            'addition': ['furthermore', 'moreover', 'additionally', 'also', 'in addition'],
+            'contrast': ['however', 'nevertheless', 'in contrast', 'on the other hand', 'despite'],
+            'causation': ['therefore', 'consequently', 'thus', 'as a result', 'hence'],
+            'temporal': ['subsequently', 'previously', 'following', 'prior to', 'meanwhile']
+        }
+        
+        transition_frequencies = {category: 0 for category in transitions}
+        total_transitions = 0
+        total_papers = 0
+        
+        for result in results:
+            intro_text = result.extracted_sections.get('introduction', '').lower()
+            if not intro_text:
+                continue
+            
+            total_papers += 1
+            paper_transitions = 0
+            
+            for category, phrases in transitions.items():
+                for phrase in phrases:
+                    count = intro_text.count(phrase)
+                    transition_frequencies[category] += count
+                    paper_transitions += count
+                    total_transitions += count
+        
+        if total_papers > 0:
+            # Calculate transition density (transitions per paper)
+            avg_transitions_per_paper = total_transitions / total_papers
+            
+            # Calculate relative frequencies of each transition type
+            relative_frequencies = {
+                category: count / max(total_transitions, 1) 
+                for category, count in transition_frequencies.items()
+            }
+            
+            pattern = EmpiricalPattern(
+                pattern_id=f"transitional_patterns_{datetime.now().strftime('%Y%m%d')}",
+                pattern_type="transition_usage",
+                description=f"Transition pattern usage based on {total_papers} analyzed papers",
+                statistical_evidence={
+                    "avg_transitions_per_paper": float(avg_transitions_per_paper),
+                    "total_transitions_analyzed": total_transitions,
+                    "transition_frequencies": {k: int(v) for k, v in transition_frequencies.items()},
+                    "relative_frequencies": relative_frequencies
+                },
+                sample_size=total_papers,
+                confidence_interval=(
+                    float(max(0, avg_transitions_per_paper - 1)), 
+                    float(avg_transitions_per_paper + 1)
+                ),
+                journals_analyzed=list(set(r.journal for r in results if r.journal)),
+                domains_analyzed=list(set(r.domain for r in results if r.domain)),
+                validation_score=0.8 if total_papers >= 30 else 0.6
+            )
+            patterns.append(pattern)
+        
+        logger.info(f"Detected {len(patterns)} transitional patterns from {len(results)} papers")
+        return patterns
+    
+    def _calculate_confidence_interval(self, data: List[float], confidence: float = 0.95) -> Tuple[float, float]:
+        """Calculate confidence interval for numerical data."""
+        if len(data) < 2:
+            return (0.0, 0.0)
+        
+        mean_val = np.mean(data)
+        std_val = np.std(data, ddof=1)
+        n = len(data)
+        
+        # t-distribution critical value (approximation for large n)
+        t_critical = 1.96 if n > 30 else 2.0  # Conservative estimate
+        
+        margin_error = t_critical * (std_val / np.sqrt(n))
+        
+        return (float(mean_val - margin_error), float(mean_val + margin_error))
+    
+    def _calculate_proportion_confidence_interval(self, proportion: float, sample_size: int, confidence: float = 0.95) -> Tuple[float, float]:
+        """Calculate confidence interval for proportion data."""
+        if sample_size < 2:
+            return (0.0, 1.0)
+        
+        # Wilson score interval (more accurate than normal approximation)
+        z = 1.96  # 95% confidence
+        n = sample_size
+        p = proportion
+        
+        denominator = 1 + z**2 / n
+        center = (p + z**2 / (2*n)) / denominator
+        margin = z * np.sqrt((p*(1-p) + z**2/(4*n)) / n) / denominator
+        
+        lower = max(0.0, center - margin)
+        upper = min(1.0, center + margin)
+        
+        return (float(lower), float(upper))
+    
+    def _calculate_validation_score(self, data: List[float]) -> float:
+        """Calculate validation score based on data quality."""
+        if len(data) < 10:
+            return 0.3
+        elif len(data) < 30:
+            return 0.6
+        elif len(data) < 50:
+            return 0.75
+        else:
+            return 0.9

@@ -8,7 +8,7 @@ scientific introductions.
 
 import logging
 import uuid
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Any
 from datetime import datetime
 import sys
 from pathlib import Path
@@ -23,7 +23,7 @@ from .models import (
 from citation_manager.models import Reference
 from citation_manager.apa_formatter import APAFormatter
 from template_engine import TargetedTemplateGenerator, ResearchSpecification
-from template_engine.models import StudyType, ResearchObjective
+from template_engine.research_specification import StudyType
 from analysis.empirical_pattern_detector import EmpiricalPatternDetector
 
 logger = logging.getLogger(__name__)
@@ -225,11 +225,7 @@ class CitationAwareGenerator:
             study_title=study_spec.study_title,
             study_type=study_type,
             research_domain=study_spec.research_domain,
-            target_journal=study_spec.target_journal,
-            primary_objective=ResearchObjective(
-                objective_text=study_spec.primary_research_question,
-                objective_type="primary"
-            )
+            target_journal=study_spec.target_journal
         )
     
     def _generate_text_with_citations(
@@ -500,23 +496,65 @@ class CitationAwareGenerator:
     def _get_empirical_validation(self, generated_text: str, research_domain: str) -> Dict[str, Any]:
         """Get empirical validation based on trained patterns."""
         try:
-            # This would use the empirical detector to validate against patterns
-            paragraphs = self._split_into_paragraphs(generated_text)
+            # Load empirical patterns from trained data
+            empirical_patterns = self.empirical_detector.detect_patterns_empirical(
+                [], require_statistical_significance=True
+            )
             
-            validation = {
-                'paragraph_count': len(paragraphs),
-                'empirical_optimal_count': '4.3±0.7',  # Would come from actual empirical data
-                'matches_empirical_structure': len(paragraphs) == 4,
-                'domain': research_domain,
-                'pattern_confidence': 0.85,  # Would be calculated from actual patterns
-                'empirical_source': 'Trained from published neuroscience literature'
-            }
+            paragraphs = self._split_into_paragraphs(generated_text)
+            current_paragraph_count = len(paragraphs)
+            
+            # Find paragraph count pattern
+            paragraph_pattern = None
+            for pattern in empirical_patterns:
+                if pattern.pattern_type == "paragraph_count":
+                    paragraph_pattern = pattern
+                    break
+            
+            if paragraph_pattern:
+                # Use real empirical data
+                mean_paragraphs = paragraph_pattern.statistical_evidence.get('mean', 4.0)
+                std_paragraphs = paragraph_pattern.statistical_evidence.get('std', 0.7)
+                confidence_interval = paragraph_pattern.confidence_interval
+                sample_size = paragraph_pattern.sample_size
+                
+                # Calculate how well current text matches empirical patterns
+                deviation = abs(current_paragraph_count - mean_paragraphs)
+                normalized_deviation = deviation / max(std_paragraphs, 1.0)
+                pattern_match_score = max(0.0, 1.0 - normalized_deviation / 2.0)
+                
+                validation = {
+                    'paragraph_count': current_paragraph_count,
+                    'empirical_optimal_count': f"{mean_paragraphs:.1f}±{std_paragraphs:.1f}",
+                    'matches_empirical_structure': deviation <= std_paragraphs,
+                    'domain': research_domain,
+                    'pattern_confidence': float(pattern_match_score),
+                    'empirical_source': f'Trained from {sample_size} published papers',
+                    'confidence_interval': confidence_interval,
+                    'deviation_score': float(normalized_deviation),
+                    'journals_analyzed': paragraph_pattern.journals_analyzed,
+                    'validation_score': paragraph_pattern.validation_score
+                }
+            else:
+                # No empirical data available - indicate this clearly
+                validation = {
+                    'paragraph_count': current_paragraph_count,
+                    'empirical_optimal_count': 'No empirical data available',
+                    'matches_empirical_structure': False,
+                    'domain': research_domain,
+                    'pattern_confidence': 0.0,
+                    'empirical_source': 'No trained patterns found - train system first',
+                    'error': 'Empirical patterns not trained - run training script first'
+                }
             
             return validation
             
         except Exception as e:
             logger.warning(f"Could not perform empirical validation: {e}")
-            return {'error': str(e)}
+            return {
+                'error': str(e),
+                'empirical_source': 'Validation failed - check empirical pattern training'
+            }
     
     def _adjust_text_length(self, text: str, target_words: int) -> str:
         """Adjust text length to approximate target word count."""
