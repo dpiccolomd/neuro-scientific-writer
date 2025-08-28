@@ -17,7 +17,7 @@ This tool helps neuroscience researchers and neurosurgeons:
 
 ## 🚀 Complete Usage Guide
 
-### 1. **Quick Setup (Tech-Agnostic)**
+### 1. **Quick Setup**
 ```bash
 # 1. Download the tool
 git clone https://github.com/dpiccolomd/neuro-scientific-writer.git
@@ -27,51 +27,62 @@ cd neuro-scientific-writer
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 3. Install core dependencies (fixed requirements)
+# 3. Install dependencies
 pip install -r requirements.txt
-
-# 4. Install additional Zotero support
 pip install pyzotero
 
-# 5. Test that it works
+# 4. Test installation
 PYTHONPATH=./src python scripts/train_from_zotero.py --setup_help
 ```
 
-**✅ Core functionality is ready! Zotero integration working.**
+**✅ Ready to use! Now proceed to train the system with your papers.**
 
-#### **🔧 Installation Notes (Updated)**
-- **Fixed sqlite3 error**: Removed from requirements (built into Python)
-- **Fixed import issues**: Updated relative imports in analysis modules
-- **Working dependencies**: Core PDF processing, citations, data analysis ready
-- **Optional packages**: Some ML/NLP packages commented out due to compilation issues
-- **See**: `INSTALLATION_STATUS.md` for detailed troubleshooting
+### 2. **Train from Your Zotero Library (Recommended)**
 
-### 2A. **🆕 ZOTERO INTEGRATION: One-Command Training (RECOMMENDED)**
+**📚 Prepare Your Zotero Library**
 
-**⚡ NEW: Train directly from your Zotero library!**
+Before training, ensure your Zotero library contains neuroscience papers:
+
+1. **Collect 50+ neuroscience papers** in your Zotero library
+   - Research articles from journals like Nature Neuroscience, Journal of Neuroscience, etc.
+   - Each paper should have PDF attachment for text extraction
+   - Papers can be in any collection or in your main library
+
+2. **Optional: Organize in collections**
+   - Create collection: "Neuroscience Papers" (or any name you prefer)
+   - Drag relevant papers into this collection
+   - Or use existing collections like "My Research", "Literature Review"
+
+3. **No special tags or .bib files needed** - the tool works directly with Zotero!
+
+**🔑 Get API Access & Train**
 
 ```bash
-# Step 1: Get Zotero API credentials (one-time setup)
+# Step 1: Get your Zotero API credentials (one-time setup)
 PYTHONPATH=./src python scripts/train_from_zotero.py --setup_help
+# Follow the instructions to get your API key and User ID
 
 # Step 2: Set your credentials
 export ZOTERO_API_KEY="your_api_key_here"
 export ZOTERO_USER_ID="your_user_id_here"
 
-# Step 3: Train from Zotero collection (one command!)
+# Step 3: Train from specific collection
 PYTHONPATH=./src python scripts/train_from_zotero.py --collection "Neuroscience Papers"
 
+# OR train from your entire library (if you have mainly neuroscience papers)
+PYTHONPATH=./src python scripts/train_from_zotero.py --min_papers 50
+
 # This automatically:
-# ✓ Downloads 50+ PDFs from your Zotero library
-# ✓ Filters for neuroscience papers with citations
-# ✓ Extracts introductions and analyzes structures
-# ✓ Creates statistical patterns with confidence intervals
-# ✓ Preserves metadata and DOIs for verification
+# ✓ Connects to your Zotero library via API
+# ✓ Downloads PDFs with neuroscience keywords
+# ✓ Extracts introduction sections
+# ✓ Analyzes writing patterns statistically
+# ✓ Creates evidence-based templates
 ```
 
-### 2B. **Manual Training (Alternative Method)**
+### 3. **Manual Training (Alternative Method)**
 
-**If you prefer manual PDF collection:**
+**If you don't use Zotero or prefer manual PDF collection:**
 
 ```bash
 # Step 1: Gather research papers manually
@@ -88,7 +99,7 @@ PYTHONPATH=./src python scripts/collect_empirical_data.py --input data/training_
 - Learns what actually works in successful publications
 - Provides scientific rigor for medical/academic use
 
-### 3. **🔬 Analyze Your Writing with Empirical Patterns**
+### 4. **🔬 Analyze Your Writing with Empirical Patterns**
 
 ```bash
 # Analyze your introduction using trained patterns
@@ -101,7 +112,7 @@ PYTHONPATH=./src python scripts/analyze_introduction.py --text your_intro.txt --
 #   • Overall quality score: 0.847 (ready for submission: Yes)
 ```
 
-### 4. **📝 Generate Evidence-Based Templates**
+### 5. **📝 Generate Evidence-Based Templates**
 
 ```bash
 # Generate template for your specific research
@@ -114,7 +125,7 @@ PYTHONPATH=./src python scripts/generate_template.py --research_type clinical_tr
 # • Journal-specific patterns (if 50+ papers available)
 ```
 
-### 5. **📋 Quick Reference**
+### 6. **📋 Quick Reference**
 
 ```bash
 # 🆕 ZOTERO TRAINING (One command)
@@ -135,24 +146,32 @@ PYTHONPATH=./src python scripts/collect_empirical_data.py --input data/training_
 
 ## 🎯 **For Non-Technical Users**
 
-**🆕 EASIER WITH ZOTERO** (Recommended):
-1. **Set up Zotero API** (one-time, 5 minutes) - run `PYTHONPATH=./src python scripts/train_from_zotero.py --setup_help`
-2. **Run one command**: `PYTHONPATH=./src python scripts/train_from_zotero.py --collection "Neuroscience Papers"`
-3. **Use the tool** with patterns trained from YOUR library
+**Step-by-Step Process:**
 
-**Manual Alternative:**
-1. **Get PDF papers** (50+ from PubMed, your university library)
-2. **Put them in a folder** called `data/training_papers/`
-3. **Run training**: `PYTHONPATH=./src python scripts/collect_empirical_data.py --input data/training_papers/`
+1. **Organize Your Research Library**
+   - Add 50+ neuroscience papers to your Zotero library
+   - Include PDF attachments for each paper
+   - Optionally create a collection like "Neuroscience Papers"
 
-**What the tool does for you:**
-- Downloads papers automatically from Zotero (or reads manual PDFs)
-- Learns what makes good introductions from YOUR collection
-- Creates templates based on real successful papers
-- Validates your writing against medical standards
-- Gives you confidence scores with statistical evidence
+2. **One-Time Setup (5 minutes)**
+   - Get Zotero API credentials following the setup instructions
+   - Set your API key and User ID as environment variables
 
-**📚 Complete Guide**: See `ZOTERO_INTEGRATION_GUIDE.md` for detailed instructions
+3. **Train the System (One Command)**
+   - Run the training command specifying your collection
+   - The tool automatically processes your papers and learns patterns
+
+4. **Use Your Trained System**
+   - Analyze your manuscript drafts against learned patterns
+   - Generate templates based on successful papers from your collection
+   - Get statistical confidence scores for your writing
+
+**What the tool learns from your papers:**
+- Optimal introduction structure and length
+- Effective argumentation patterns (problem→gap→solution)
+- Journal-specific writing conventions
+- Citation density and placement patterns
+- Transition strategies between concepts
 
 ## 🛡️ Rigorous Quality Control Features
 
