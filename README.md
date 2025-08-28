@@ -27,14 +27,24 @@ cd neuro-scientific-writer
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 3. Install everything needed
+# 3. Install core dependencies (fixed requirements)
 pip install -r requirements.txt
 
-# 4. Test that it works
-python examples/empirical_pattern_demo.py
+# 4. Install additional Zotero support
+pip install pyzotero
+
+# 5. Test that it works
+PYTHONPATH=./src python scripts/train_from_zotero.py --setup_help
 ```
 
-**✅ That's it! The tool is ready to use.**
+**✅ Core functionality is ready! Zotero integration working.**
+
+#### **🔧 Installation Notes (Updated)**
+- **Fixed sqlite3 error**: Removed from requirements (built into Python)
+- **Fixed import issues**: Updated relative imports in analysis modules
+- **Working dependencies**: Core PDF processing, citations, data analysis ready
+- **Optional packages**: Some ML/NLP packages commented out due to compilation issues
+- **See**: `INSTALLATION_STATUS.md` for detailed troubleshooting
 
 ### 2A. **🆕 ZOTERO INTEGRATION: One-Command Training (RECOMMENDED)**
 
@@ -42,14 +52,14 @@ python examples/empirical_pattern_demo.py
 
 ```bash
 # Step 1: Get Zotero API credentials (one-time setup)
-python scripts/train_from_zotero.py --setup_help
+PYTHONPATH=./src python scripts/train_from_zotero.py --setup_help
 
 # Step 2: Set your credentials
 export ZOTERO_API_KEY="your_api_key_here"
 export ZOTERO_USER_ID="your_user_id_here"
 
 # Step 3: Train from Zotero collection (one command!)
-python scripts/train_from_zotero.py --collection "Neuroscience Papers"
+PYTHONPATH=./src python scripts/train_from_zotero.py --collection "Neuroscience Papers"
 
 # This automatically:
 # ✓ Downloads 50+ PDFs from your Zotero library
@@ -69,7 +79,7 @@ mkdir -p data/training_papers
 # Put 50+ neuroscience PDF papers in this folder
 
 # Step 2: Build empirical pattern database
-python scripts/collect_empirical_data.py --input data/training_papers/
+PYTHONPATH=./src python scripts/collect_empirical_data.py --input data/training_papers/
 ```
 
 **🔬 What this does:**
@@ -82,7 +92,7 @@ python scripts/collect_empirical_data.py --input data/training_papers/
 
 ```bash
 # Analyze your introduction using trained patterns
-python scripts/analyze_introduction.py --text your_intro.txt --patterns data/empirical_patterns/
+PYTHONPATH=./src python scripts/analyze_introduction.py --text your_intro.txt --patterns data/empirical_patterns/
 
 # Output example:
 # ✅ Based on analysis of 67 papers from your Zotero library:
@@ -95,7 +105,7 @@ python scripts/analyze_introduction.py --text your_intro.txt --patterns data/emp
 
 ```bash
 # Generate template for your specific research
-python scripts/generate_template.py --research_type clinical_trial --domain neurosurgery --patterns data/empirical_patterns/
+PYTHONPATH=./src python scripts/generate_template.py --research_type clinical_trial --domain neurosurgery --patterns data/empirical_patterns/
 
 # Creates template with:
 # • Structure based on YOUR paper collection
@@ -108,32 +118,32 @@ python scripts/generate_template.py --research_type clinical_trial --domain neur
 
 ```bash
 # 🆕 ZOTERO TRAINING (One command)
-python scripts/train_from_zotero.py --collection "Neuroscience Papers"
+PYTHONPATH=./src python scripts/train_from_zotero.py --collection "Neuroscience Papers"
 
 # 🔬 ANALYZE INTRODUCTION (With your empirical patterns)  
-python scripts/analyze_introduction.py --text intro.txt --patterns data/empirical_patterns/
+PYTHONPATH=./src python scripts/analyze_introduction.py --text intro.txt --patterns data/empirical_patterns/
 
 # 📝 GENERATE TEMPLATE (Evidence-based)
-python scripts/generate_template.py --research_type clinical_trial --domain neurosurgery
+PYTHONPATH=./src python scripts/generate_template.py --research_type clinical_trial --domain neurosurgery
 
 # 🎓 LEARN THE CONCEPTS (Educational tutorial)
-python examples/pattern_comparison_tutorial.py
+PYTHONPATH=./src python examples/pattern_comparison_tutorial.py
 
 # 📚 MANUAL TRAINING (Alternative to Zotero)
-python scripts/collect_empirical_data.py --input data/training_papers/
+PYTHONPATH=./src python scripts/collect_empirical_data.py --input data/training_papers/
 ```
 
 ## 🎯 **For Non-Technical Users**
 
 **🆕 EASIER WITH ZOTERO** (Recommended):
-1. **Set up Zotero API** (one-time, 5 minutes) - see `ZOTERO_INTEGRATION_GUIDE.md`
-2. **Run one command**: `python scripts/train_from_zotero.py --collection "Neuroscience Papers"`
+1. **Set up Zotero API** (one-time, 5 minutes) - run `PYTHONPATH=./src python scripts/train_from_zotero.py --setup_help`
+2. **Run one command**: `PYTHONPATH=./src python scripts/train_from_zotero.py --collection "Neuroscience Papers"`
 3. **Use the tool** with patterns trained from YOUR library
 
 **Manual Alternative:**
 1. **Get PDF papers** (50+ from PubMed, your university library)
 2. **Put them in a folder** called `data/training_papers/`
-3. **Run training**: `python scripts/collect_empirical_data.py --input data/training_papers/`
+3. **Run training**: `PYTHONPATH=./src python scripts/collect_empirical_data.py --input data/training_papers/`
 
 **What the tool does for you:**
 - Downloads papers automatically from Zotero (or reads manual PDFs)

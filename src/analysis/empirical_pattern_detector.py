@@ -12,7 +12,7 @@ from pathlib import Path
 
 from .models import AnalysisResult, WritingPattern, SentenceType
 from .exceptions import PatternDetectionError
-from ..pdf_processor.models import ProcessedDocument
+from pdf_processor.models import ProcessedDocument
 
 logger = logging.getLogger(__name__)
 
