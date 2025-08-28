@@ -127,7 +127,7 @@ class ZoteroClient:
         logger.info("Fetching Zotero collections")
         return self._make_request("collections")
     
-    def get_collection_items(self, collection_key: str, limit: int = 100) -> List[ZoteroItem]:
+    def get_collection_items(self, collection_key: str, limit: int = 500) -> List[ZoteroItem]:
         """Get items from a specific collection."""
         logger.info(f"Fetching items from collection {collection_key}")
         
@@ -144,6 +144,8 @@ class ZoteroClient:
             try:
                 item = self._parse_zotero_item(item_data)
                 if item:
+                    # Get PDF attachments for this item
+                    self._get_item_attachments(item)
                     items.append(item)
             except Exception as e:
                 logger.warning(f"Failed to parse item {item_data.get('key', 'unknown')}: {e}")
@@ -168,6 +170,8 @@ class ZoteroClient:
             try:
                 item = self._parse_zotero_item(item_data)
                 if item and item.is_neuroscience_related:
+                    # Get PDF attachments for this item
+                    self._get_item_attachments(item)
                     items.append(item)
             except Exception as e:
                 logger.warning(f"Failed to parse item {item_data.get('key', 'unknown')}: {e}")
@@ -198,6 +202,21 @@ class ZoteroClient:
         except Exception as e:
             logger.error(f"Failed to download attachment {attachment_key}: {e}")
             return False
+    
+    def _get_item_attachments(self, item: ZoteroItem):
+        """Get PDF attachments for an item."""
+        try:
+            # Get children (attachments) for this item
+            children_data = self._make_request(f"items/{item.item_key}/children")
+            
+            for child in children_data:
+                child_data = child.get('data', {})
+                if (child_data.get('itemType') == 'attachment' and 
+                    child_data.get('contentType') == 'application/pdf'):
+                    item.pdf_attachments.append(child.get('key', ''))
+                    
+        except Exception as e:
+            logger.warning(f"Failed to get attachments for item {item.item_key}: {e}")
     
     def _parse_zotero_item(self, item_data: Dict) -> Optional[ZoteroItem]:
         """Parse Zotero item data into ZoteroItem object."""
